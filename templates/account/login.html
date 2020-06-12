@@ -1,0 +1,29 @@
+{% extends "templates/template_main.html" %}
+
+{% block extra_includes %}
+{% endblock %}
+
+{% block title %}Coup de pouce : connection{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row align-items-center justify-content-center">
+        <div class="col-md-4 col-lg-4 col-xs-12 col-sm-12">
+            <h2>Connection</h2>
+            <form action="." method="POST">
+                <div class="form-group">
+                    <label for="username">Utilisateur :</label>
+                    <input class="form-control" id="username" name="username" placeholder="Entrer votre nom d'utilisateur">
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe :</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Entrer votre mot de passe">
+                </div>
+                <button type="submit" class="btn btn-success">Se connecter</button>
+            </form>
+            <a href="{{ url_for('create_account') }}"><button class="btn btn-info">Créer un compte</button></a>
+            <a href="{{ url_for('reset_password') }}"><button class="btn btn-info">Réinitialiser son mot de passe</button></a>
+        </div>
+    </div>
+</div>
+{% endblock %}

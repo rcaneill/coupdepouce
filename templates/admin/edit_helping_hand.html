@@ -1,0 +1,57 @@
+{% extends "templates/template_main.html" %}
+
+{% block extra_includes %}
+<script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
+<script src="https://kit.fontawesome.com/d550980459.js" crossorigin="anonymous"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/ajout_coup_de_pouce.js') }}"></script>
+{% endblock %}
+
+{% block title %}Coup de pouce : éditer une activité{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h1>Éditeur d'activités</h1>
+            <div id='editor_holder'>
+            </div>
+            <a id="submit">
+                <button class="btn btn-success">Éditer l'activité</button>
+            </a>
+            <a href="{{ url_for('admin_flash_msg', msg='Édition de l\'activité annulée.') }}">
+                <button class="btn btn-danger">Annuler</button>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+// Initialize the editor with a JSON schema
+var editor = new JSONEditor(document.getElementById('editor_holder'),{
+    iconlib: "fontawesome5",
+    theme: "bootstrap4",
+    disable_collapse: true,
+    disable_edit_json: true,
+    disable_properties: true,
+    disable_array_delete_last_row: true,
+    schema: schema_ajout_cdp
+});
+
+editor.setValue(JSON.parse('{{ data_hh | tojson }}'));
+
+$("#submit").click(function(){
+var href = $(this).attr("href");
+var data = JSON.stringify(editor.getValue());
+$.ajax({
+    data : data,
+    type : 'POST',
+    dataType: 'json',
+    contentType : "application/json",
+    url : '.'
+}).done(function() {
+    window.location.href = "/admin/";
+}).fail(function(){alert("erreur")});
+});
+</script>
+{% endblock %}
+

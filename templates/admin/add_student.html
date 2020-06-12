@@ -1,0 +1,31 @@
+{% extends "templates/template_main.html" %}
+
+{% block extra_includes %}
+{% endblock %}
+
+{% block title %}Coup de pouce : ajouter un élève à une classe{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row align-items-center justify-content-center">
+        <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+            <h2>Ajouter des élèves</h2>
+            <h3>{{ classroom.name }}</h3>
+            <form action="." method="POST">
+                <div class="form-group">
+                    <label for="student_usernames">Nom d'utilisateur de l'élève :</label><br>
+                    <select id="student_usernames" name="student_usernames" multiple required>
+                        {% for student in students %}
+                        {% if student not in classroom.students %}
+                        <option value="{{ student.username }}">{{ student.name }} {{ student.surname }}</option><br>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <p>Maintenez appuyée la touche Ctrl (Linux, Windows) ou Command (Mac) pour sélectionner plusieurs élèves.</p>
+                <button type="submit" class="btn btn-success">Ajouter les élèves à la salle de classe</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

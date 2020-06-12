@@ -1,0 +1,14 @@
+{% extends "templates/template_main.html" %}
+
+{% block extra_includes %}
+{% endblock %}
+
+{% block title %}Coup de pouce : mon compte{% endblock %}
+
+{% block content %}
+<div>
+    <ul>
+        <li><a href="{{ url_for('change_psswrd') }}">Changer son mot de passe</a></li>
+    </ul>
+</div>
+{% endblock %}

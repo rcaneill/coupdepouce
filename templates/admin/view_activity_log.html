@@ -1,0 +1,42 @@
+{% extends "templates/template_main.html" %}
+
+{% block extra_includes %}
+{% endblock %}
+
+{% block title %}Coup de pouce : historique{% endblock %}
+
+{% block content %}
+<div class="container">
+        <div class="row">
+            <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+                <h2>{{ activity.title }}</h2>
+                <ul>
+                    {% for question in activity.questions %}
+                    <li>
+                        {{ question.title }}
+                    <ul>
+                        {% for helping_hand in question.helping_hands %}
+                        <li>
+                            Coup de pouce {{ helping_hand.n_helping_hand }}
+                            <ul>
+                                {% for log in helping_hand.students %}
+                                <li>{{log.student.username }} ({{ log.student.name }} {{log.student.surname }}),
+                                {{ log.timestamp.year }}-{{ log.timestamp.month }}-{{ log.timestamp.day }}
+                                {% if log.timestamp.hour < 12 %}
+                                matin
+                                {% else %}
+                                après-midi
+                                {% endif %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

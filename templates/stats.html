@@ -1,0 +1,44 @@
+{% extends 'templates/template_main.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row align-items-center justify-content-center">
+        <div class="col-md-8 col-lg-8 col-xs-12 col-sm-12">
+            <h1>Professeurs</h1>
+            <p>
+                {% with all_teacher = Teacher.query.all() %}
+                {% for teacher in all_teacher %}
+                <h5>{{ teacher.name }} {{ teacher.surname }} | {{ teacher.last_connection.astimezone(fr_tz) }} </h5>
+                <ul>
+                    {% for activity in teacher.activities %}
+                    <li>
+                        {{ activity.title }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                <br>
+                <ul>
+                    {% for classroom in teacher.classrooms %}
+                    <li>
+                        {{ classroom.name }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endfor %}
+                {% endwith %}
+            </p>
+
+            <h1>Élèves</h1>
+            <p>
+                {% with all_student = Student.query.all() %}
+                {% for student in all_student %}
+                {{ student.name }} {{ student.surname }} | {{ student.last_connection.astimezone(fr_tz) }} <br>
+                {% endfor %}
+                {% endwith %}
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

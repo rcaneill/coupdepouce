@@ -1,0 +1,23 @@
+{% extends "templates/template_main.html" %}
+
+{% block extra_includes %}
+{% endblock %}
+
+{% block title %}Coup de pouce : voir coup de pouce{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+            <h2>{{ activity.title }}</h2>
+            <h3>{{ question.title }}, coup de pouce {{ helping_hand.n_helping_hand }}</h3>
+            <br>
+            {{ helping_hand.content }}
+            <br>
+            <a href="{{ url_for('access_activity', classroom_id=classroom.id, activity_id=activity.id) }}">
+                <button class="btn btn-success">Retour à l'activité</button>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

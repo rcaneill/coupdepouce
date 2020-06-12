@@ -1,0 +1,31 @@
+{% extends "templates/template_main.html" %}
+
+{% block extra_includes %}
+{% endblock %}
+
+{% block title %}Coup de pouce : historique de {{ student.name }} {{student.surname }}{% endblock %}
+
+{% block content %}
+<div class="container">
+        <div class="row">
+            <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+                <ul>
+                    {% for log in student.helping_hands %}
+                    {% if log.helping_hand.question.activity in current_user.activities %}
+                    <li> {{ log.helping_hand.question.activity.title }} : {{ log.helping_hand.question.title }} : {{ log.helping_hand.n_helping_hand }}
+                    <br>
+                    {{ log.timestamp.year }}-{{ log.timestamp.month }}-{{ log.timestamp.day }}
+                    {% if log.timestamp.hour < 12 %}
+                    matin
+                    {% else %}
+                    après-midi
+                    {% endif %}
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

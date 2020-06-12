@@ -1,0 +1,18 @@
+{% extends 'templates/template_main.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row align-items-center justify-content-center">
+        <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+            {% if current_user.is_authenticated %}
+            <p>Une remarque, une question, un bug ? Contactez-nous par email !</p>
+            <p><a href="mailto:r.romaincaneill@gmail.com">Envoyer un email à r.romaincaneill@gmail.com</a></p>
+            {% else %}
+            <p>Veuillez vous connecter afin d'accéder à cette page.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

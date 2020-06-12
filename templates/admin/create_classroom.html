@@ -1,0 +1,24 @@
+{% extends "templates/template_main.html" %}
+
+{% block extra_includes %}
+{% endblock %}
+
+{% block title %}Coup de pouce : créer salle de classe{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row align-items-center justify-content-center">
+        <div class="col-md-4 col-lg-4 col-xs-12 col-sm-12">
+            <h2>Créer salle de classe</h2>
+            <form action="." method="POST">
+                <div class="form-group">
+                    <label for="class_name">Nom de la classe (e.g. lycée NOM_LYCÉE, 2nd NUMÉRO_CLASSE) :</label>
+                    <input class="form-control" id="class_name" name="class_name" placeholder="Nom de la classe" required>
+                </div>
+                <button type="submit" class="btn btn-success">créer salle de classe</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

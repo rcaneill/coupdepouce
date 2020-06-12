@@ -1,0 +1,43 @@
+{% extends "templates/template_main.html" %}
+
+{% block extra_includes %}
+{% endblock %}
+
+{% block title %}Coup de pouce : changer mot de passe{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row align-items-center justify-content-center">
+        <div class="col-md-4 col-lg-4 col-xs-12 col-sm-12">
+            <h2>Changer mot de passe</h2>
+            <form action="." method="POST">
+                <div class="form-group">
+                    <label for="password">Ancien mot de passe :</label>
+                    <input type="password" class="form-control" id="old_password" name="old_password" placeholder="Entrer votre ancien mot de passe" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Nouveau mot de passe :</label>
+                    <input type="password" class="form-control" id="new_password" name="new_password" placeholder="Entrer votre nouveau mot de passe" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Nouveau mot de passe :</label>
+                    <input type="password" class="form-control" id="new_password_verif" name="new_password_verif" placeholder="Confirmer votre nouveau mot de passe" required>
+                </div>
+                <button type="submit" class="btn btn-success">changer mot de passe</button>
+                <script>
+                var password = document.getElementById("new_password"), confirm_password = document.getElementById("new_password_verif");
+                function validatePassword(){
+                if(password.value != confirm_password.value) {
+                confirm_password.setCustomValidity("Passwords Don't Match");
+                } else {
+                confirm_password.setCustomValidity('');
+                }
+                }
+                password.onchange = validatePassword;
+                confirm_password.onkeyup = validatePassword;
+                </script>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

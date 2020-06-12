@@ -1,0 +1,31 @@
+{% extends "templates/template_main.html" %}
+
+{% block extra_includes %}
+{% endblock %}
+
+{% block title %}Coup de pouce : créer comptes élèves{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row align-items-center justify-content-center">
+        <div class="col-md-8 col-lg-8 col-xs-12 col-sm-12">
+            <p>Si vous avez une feuille de tableur (LibreOffice, Excel, Google Sheet, etc)
+            avec les noms, prénoms et adresse email de vos élèves, il vous suffit de réordonner
+            les colonnes dans le sens "Nom", "Prénom", "Adresse email" et de copier coller
+            le résultat dans la zone de texte.<br>
+            Sinon, vous pouvez écrire à la main les noms et adresses des élèves,
+            1 élève par ligne.</p>
+            <h2>Créer salle de classe</h2>
+            <form action="." method="POST">
+                <div class="form-group">
+                    <p>Nom des élèves (nom, prénom, email séparés par une virgule ou une tabulation) :</p>
+                    <textarea  rows="4" cols="50" id="text" name="text" placeholder="Nom 1, Prénom 1, email 1&#10;Nom 2, Prénom 2, email 2" required>{{ text }}</textarea>
+                </div>
+                <button type="submit" id='submitbutton' class="btn btn-success">Créer comptes élèves</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

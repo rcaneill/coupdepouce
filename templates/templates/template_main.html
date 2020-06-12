@@ -1,0 +1,54 @@
+<html>
+    <style>
+        .footer {
+           position: fixed;
+           left: 0;
+           bottom: 0;
+           width: 100%;
+           text-align: center;
+        }
+    </style>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        {% include "templates/header_include.html" %}
+
+        {% block extra_includes %}
+        {% endblock %}
+
+        <title>
+            {% block title %}{% endblock %}
+        </title>
+
+    </head>
+
+    <body>
+        {% include "templates/navbar_main.html" %}
+        {% include "templates/flash_messages.html" %}
+
+        {% block content%}
+        {% endblock %}
+
+        <footer class=" mt-auto py-3">
+
+  <div class="container">
+            <div class="center">
+                <hr>
+                <div>
+                    <a href="{{ url_for('about') }}">À propos</a>
+                    <a>  |  </a>
+                    <a href="{{ url_for('privacy') }}">Utilisation des données</a>
+                    {% if current_user.is_authenticated %}
+                    <a>  |  </a>
+                    <a href="{{ url_for('contact') }}">Rapporter un bug / suggérer une modification</a>
+                    {% endif %}
+                </div>
+            </div>
+            </div>
+        </footer>
+
+
+    </body>
+</html>

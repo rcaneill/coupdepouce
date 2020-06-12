@@ -1,0 +1,276 @@
+{% extends 'templates/template_main.html' %}
+
+{% block content %}
+<div class="container">
+	  <div class="row">
+	    <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+
+<!-- ÉLÈVES    -->
+	      <h2>Vos élèves (toutes classes confondues)</h2>
+	      <a href="{{ url_for('create_multi_account') }}">
+		      <button class="btn btn-light" type="submit">Créer des comptes pour vos élèves</button>
+		  </a><br>
+
+	      <button data-toggle="collapse" data-target="#your_students" type="button" class="btn btn-primary">Voir / masquer</button>
+	        <!-- Trigger the modal with a button -->
+		  <button class="btn btn-success" type="button" data-toggle="modal" data-target="#add_student">Ajouter un élève</button>
+            <!-- Modal -->
+  	        <div class="modal fade" id="add_student" role="dialog">
+    	      <div class="modal-dialog modal-lg">
+	            <div class="modal-content">
+	       	      <div class="modal-header">
+		            <h4 class="modal-title">Ajouter un élève</h4>
+		            <button type="button" class="close" data-dismiss="modal">&times;</button>
+		          </div>
+		          <div class="modal-body">
+		            <form action="{{ url_for('link_student') }}" method="POST">
+                      <div class="form-group">
+                        <label for="student_username">Nom d'utilisateur de l'élève :</label>
+                        <input class="form-control" id="student_username" name="student_username" placeholder="Nom d'utilisateur de l'élève" required>
+                      </div>
+                      <button type="submit" class="btn btn-success">Ajouter élève</button>
+                    </form>
+		          </div>
+	            </div>
+	          </div>
+	        </div>
+
+
+
+
+          <div id="your_students" class="collapse">
+            {% for student in current_user.students %}
+            <!-- Trigger the modal with a button -->
+    	      <button type="button" class="btn btn-light" data-toggle="modal" data-target="{{ '#' + 'student_id' + student.id|string }}">{{ student.name }} {{ student.surname }}</button>
+    	      <!-- Modal -->
+    	      <div class="modal fade" id="{{ 'student_id' + student.id|string }}" role="dialog">
+        	    <div class="modal-dialog modal-lg">
+    	          <div class="modal-content">
+    	       	    <div class="modal-header">
+    		          <h4 class="modal-title">{{ student.name }} {{ student.surname }}</h4>
+    		          <button type="button" class="close" data-dismiss="modal">&times;</button>
+    		        </div>
+    		        <div class="modal-body">
+    		          <form action="{{ url_for('remove_student', student_id=student.id) }}" method="POST" onsubmit="return confirm('Êtes vous sûrs?');">
+    		              <button class="btn btn-danger" type="submit">Enlever l'élève</button>
+    		          </form>
+    		          <h5>Classes</h5>
+    		          <hr>
+    		          <form action="{{ url_for('add_student_to_classroom', student_id=student.id) }}" method="POST">
+                        <div class="form-group">
+
+                          <!-- <label for="classroom_id">Classe :</label> -->
+                          <select name="classroom_id" class="form-control" id="classroom_id" placeholder="Classe ?">
+            	            {% for classroom in current_user.classrooms %}
+            	            {% if not Student.query.filter_by(id=student.id).first() in classroom.students %}
+            	              <option value="{{ classroom.id }}">{{ classroom.name }}</option>
+            	            {% endif %}
+            	            {% endfor %}
+            	          </select>
+                        </div>
+                        <button type="submit" class="btn btn-success">Ajouter à la classe</button>
+                      </form>
+                      <hr>
+                      <form action="{{ url_for('remove_student_from_classroom', student_id=student.id) }}" method="POST">
+                        <div class="form-group">
+                          <!-- <label for="classroom_id">Classe :</label> -->
+                          <select name="classroom_id" class="form-control" id="classroom_id" placeholder="Classe ?">
+            	            {% for classroom in current_user.classrooms %}
+            	            {% if Student.query.filter_by(id=student.id).first() in classroom.students %}
+            	              <option value="{{ classroom.id }}">{{ classroom.name }}</option>
+            	            {% endif %}
+            	            {% endfor %}
+            	          </select>
+                        </div>
+                        <button type="submit" class="btn btn-danger">Enlever de la classe</button>
+                      </form>
+    		          <h5>Activités</h5>
+    		          <form action="/admin/view-student-logs/{{ student.id }}/"  method="get" style="display:inline-block;">
+    		           <button class="btn btn-info" type="submit">Voir les logs</button>
+    		          </form>
+    		        </div>
+    	          </div>
+    	        </div>
+    	      </div>
+    	      <!-- <br> -->
+            {% endfor %}
+
+            <!--
+            <ul>
+                {% for student in current_user.students %}
+                <li>{{ student.name }} {{ student.surname }} ({{ student.username }})</li>
+                {% endfor %}
+            </ul>
+            -->
+
+          </div>
+	    </div>
+
+
+<!-- CLASSES -->
+	    <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+	        <h2>Vos classes</h2>
+	        <button data-toggle="collapse" data-target="#your_classes" type="button" class="btn btn-primary">Voir / masquer</button>
+
+	        <!-- Trigger the modal with a button -->
+		    <button class="btn btn-success" type="submit"data-toggle="modal" data-target="#create_classroom">Créer une classe</button>
+		    <!-- Modal -->
+  	        <div class="modal fade" id="create_classroom" role="dialog">
+    	      <div class="modal-dialog modal-lg">
+	            <div class="modal-content">
+	       	      <div class="modal-header">
+		            <h4 class="modal-title">Créer une classe</h4>
+		            <button type="button" class="close" data-dismiss="modal">&times;</button>
+		          </div>
+		          <div class="modal-body">
+		            <form action="{{ url_for('create_classroom') }}" method="POST">
+                      <div class="form-group">
+                        <label for="student_username">Nom de la classe (e.g. lycée NOM_LYCÉE, 2nd NUMÉRO_CLASSE) :</label>
+                        <input class="form-control" id="class_name" name="class_name" placeholder="Nom de la classe" required>
+                      </div>
+                      <button type="submit" class="btn btn-success">Créer la classe</button>
+                    </form>
+		          </div>
+	            </div>
+	          </div>
+	        </div>
+
+        <div id="your_classes" class="collapse">
+        {% for classroom in current_user.classrooms %}
+	      <!-- Trigger the modal with a button -->
+	      <button type="button" class="btn btn-light" data-toggle="modal" data-target="{{ '#' + 'classroom_id' + classroom.id|string }}">{{ classroom.name }}</button>
+	      <!-- Modal -->
+	      <div class="modal fade" id="{{ 'classroom_id' + classroom.id|string }}" role="dialog">
+    	    <div class="modal-dialog modal-lg">
+	          <div class="modal-content">
+	       	    <div class="modal-header">
+		          <h4 class="modal-title">Classe &ndash; {{ classroom.name }}</h4>
+		          <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        </div>
+		        <div class="modal-body">
+		          <form action="{{ url_for('delete_classroom', classroom_id=classroom.id) }}" method="GET" onsubmit="return confirm('Êtes vous sûrs?');">
+		              <button class="btn btn-danger" type="submit">Supprimer la classe</button>
+		          </form>
+		          <h5>Élèves</h5>
+		          <button data-toggle="collapse" data-target="#your_classes_students" type="button" class="btn btn-primary">Voir / masquer les élèves</button>
+		          <a href="/admin/add-multi-students-to-classroom/{{ classroom.id }}/">
+		            <button class="btn btn-success" type="submit">Ajouter des élèves</button>
+		          </a>
+		          <div id="your_classes_students" class="collapse">
+		            <ul>
+                    {% for student in classroom.students %}
+                    <li>
+                    {{ student.name }} {{ student.surname }}
+                    <form action="{{ url_for('_remove_student_from_classroom', student_id=student.id, classroom_id=classroom.id) }}" method="GET" onsubmit="return confirm('Êtes vous sûrs?');">
+                        <button class="btn btn-danger" type="submit">Enlever de la classe</button>
+                    </form>
+                    </li>
+                    {% endfor %}
+                    </ul>
+		          </div>
+		          <h5>Activités</h5>
+		          <button data-toggle="collapse" data-target="#your_classes_activities" type="button" class="btn btn-primary">Voir / masquer les activités</button>
+		          <div id="your_classes_activities" class="collapse">
+		            <ul>
+                    {% for activity in classroom.activities %}
+                    <li>
+                    {{ activity.title }}
+                    <form action="{{ url_for('_remove_activity_from_classroom', activity_id=activity.id, classroom_id=classroom.id) }}" method="GET" onsubmit="return confirm('Êtes vous sûrs?');">
+                        <button class="btn btn-danger" type="submit">Enlever de la classe</button>
+                    </form>
+                    </li>
+                    {% endfor %}
+                    </ul>
+		          </div>
+		        </div>
+	          </div>
+	        </div>
+	      </div>
+	      <br>
+	    {% endfor %}
+	    </div>
+        </div>
+
+
+<!-- ACTIVITÉS -->
+        <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+        <h2>Vos activités</h2>
+	    <button data-toggle="collapse" data-target="#your_activities" type="button" class="btn btn-primary">Voir / masquer</button>
+		    <a href="{{ url_for('create_helping_hand') }}">
+		      <button class="btn btn-success" type="submit">Créer une activité</button>
+		    </a>
+        <div id="your_activities" class="collapse">
+        {% for activity in current_user.activities %}
+	      <!-- Trigger the modal with a button -->
+	      <button type="button" class="btn btn-light" data-toggle="modal" data-target="{{ '#' + 'activity_id' + activity.id|string }}">{{ activity.title }}</button>
+
+	      <!-- Modal -->
+	      <div class="modal fade" id="{{ 'activity_id' + activity.id|string }}" role="dialog">
+    	    <div class="modal-dialog modal-lg">
+	          <div class="modal-content">
+	       	    <div class="modal-header">
+		          <h4 class="modal-title">Activité &ndash; {{ activity.title }}</h4>
+		          <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        </div>
+		        <div class="modal-body">
+		          <form action="{{ url_for('delete_activity', activity_id=activity.id) }}" method="GET" onsubmit="return confirm('Êtes vous sûrs?');" style="display:inline-block;">
+		              <button class="btn btn-danger" type="submit">Supprimer l'activité</button>
+		          </form>
+		          <a href="/admin/edit-helping-hand/{{ activity.id }}/">
+    		        <button class="btn btn-primary" type="submit">Éditer l'activité</button>
+    		      </a>
+		          <form action="/admin/view-activity-logs/{{ activity.id }}/"  method="get" style="display:inline-block;">
+		           <button class="btn btn-light" type="submit">Afficher les logs</button>
+		          </form>
+		          <h5>Classes</h5>
+		          <hr>
+		          <form action="{{ url_for('add_activity_to_classroom', activity_id=activity.id) }}" method="POST">
+                    <div class="form-group">
+
+                      <!-- <label for="classroom_id">Classe :</label> -->
+                      <select name="classroom_id" class="form-control" id="classroom_id" placeholder="Classe ?">
+        	            {% for classroom in current_user.classrooms %}
+        	            {% if not Activity.query.filter_by(id=activity.id).first() in classroom.activities %}
+        	              <option value="{{ classroom.id }}">{{ classroom.name }}</option>
+        	            {% endif %}
+        	            {% endfor %}
+        	          </select>
+                    </div>
+                    <button type="submit" class="btn btn-success">Ajouter à la classe</button>
+                  </form>
+                  <hr>
+                  <form action="{{ url_for('remove_activity_from_classroom', activity_id=activity.id) }}" method="POST">
+                    <div class="form-group">
+                      <!-- <label for="classroom_id">Classe :</label> -->
+                      <select name="classroom_id" class="form-control" id="classroom_id" placeholder="Classe ?">
+        	            {% for classroom in current_user.classrooms %}
+        	            {% if Activity.query.filter_by(id=activity.id).first() in classroom.activities %}
+        	              <option value="{{ classroom.id }}">{{ classroom.name }}</option>
+        	            {% endif %}
+        	            {% endfor %}
+        	          </select>
+                    </div>
+                    <button type="submit" class="btn btn-danger">Enlever de la classe</button>
+                  </form>
+		          <div>
+		            {% for question in activity.questions %}
+		            <h5>{{ question.title }}</h5>
+		            {% for helping_hand in question.helping_hands %}
+		            <h6>{{ helping_hand.title }}</h6>
+		            {{ helping_hand.content }}
+		            {% endfor %}
+		            {% endfor %}
+		          </div>
+		        </div>
+	          </div>
+	        </div>
+	      </div>
+	      <br>
+	    {% endfor %}
+	    </div>
+        </div>
+
+	    </div>
+	  </div>
+	</div>
+{% endblock %}

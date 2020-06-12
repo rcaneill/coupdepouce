@@ -1,0 +1,37 @@
+{% extends "templates/template_main.html" %}
+
+{% block extra_includes %}
+{% endblock %}
+
+{% block title %}Coup de pouce : élève{% endblock %}
+
+{% block content %}
+<div>
+    <ul>
+        <li><a href="{{ url_for('link_to_teacher') }}">Se signaler au professeur</a></li>
+    </ul>
+</div>
+
+<div class="container">
+    <div class="row">
+	    <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+	        <h2>Vos classes</h2>
+            <ul>
+                {% for classroom in current_user.classrooms %}
+                <li>{{ classroom.name }}
+                    <br>
+                    {% if classroom.activities %}
+                    Activités diponibles :
+                    <ul>
+                        {% for activity in classroom.activities %}
+                        <li><a href="/student/access-activity/{{ classroom.id }}/{{ activity.id }}">{{ activity.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+	    </div>
+	</div>
+</div>
+{% endblock %}
