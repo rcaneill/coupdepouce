@@ -1,4 +1,4 @@
-from flask_app import app, load_user, db, Teacher, Student, send_confirmation_email, EMAIL_CONFIRMATION_SALT, RESET_PASSWORD_SALT, send_reset_password_email
+from flask_app import app, load_user, db, Teacher, Student, send_confirmation_email, send_reset_password_email
 
 from flask_login import current_user, login_user, login_required, logout_user
 from flask import redirect, render_template, url_for, request, flash
@@ -63,7 +63,7 @@ def reset_password():
 def reset_password_token(token):
     try:
         confirm_serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-        email = confirm_serializer.loads(token, salt=RESET_PASSWORD_SALT, max_age=3600*24)
+        email = confirm_serializer.loads(token, salt=app.config['RESET_PASSWORD_SALT'], max_age=3600*24)
     except:
         flash('Le lien est invalide ou a expiré.')
         return redirect(url_for('login'))
@@ -82,7 +82,7 @@ def reset_password_token(token):
 def confirm_email(token):
     try:
         confirm_serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-        email = confirm_serializer.loads(token, salt=EMAIL_CONFIRMATION_SALT, max_age=3600*24)
+        email = confirm_serializer.loads(token, salt=app.config['EMAIL_CONFIRMATION_SALT'], max_age=3600*24)
     except:
         flash('Le lien est invalide ou a expiré. Connectez-vous afin de recevoir un nouveau lien de validation par email.')
         return redirect(url_for('login'))

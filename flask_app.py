@@ -31,7 +31,7 @@ mail = Mail(app)
 ################################################################################
 from module_database import Student, Teacher, Classroom, Activity, Question, HelpingHand, HelpingHandLog, load_user
 
-from module_email import send_confirmation_email, EMAIL_CONFIRMATION_SALT, RESET_PASSWORD_SALT, send_reset_password_email
+from module_email import send_confirmation_email, send_reset_password_email
 
 
 ################################################################################

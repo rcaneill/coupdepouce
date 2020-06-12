@@ -5,9 +5,6 @@ from smtplib import SMTPRecipientsRefused
 from flask import flash
 from itsdangerous import URLSafeTimedSerializer
 
-EMAIL_CONFIRMATION_SALT="ladnv98768whBSDV84W79EFHONCJnhju756y5tergdfbngjmhngfgeR"
-RESET_PASSWORD_SALT="hbgfyui89tyughujknbhgfyt687uoijoJOIUY76TYGTY6789IOLKl,cvf"
-
 def send_email(subject, recipients, text_body, html_body):
     msg = Message(subject, recipients=recipients)
     msg.body = text_body
@@ -20,7 +17,7 @@ def send_confirmation_email(user_email):
 
     confirm_url = url_for(
         'confirm_email',
-        token=confirm_serializer.dumps(user_email, salt=EMAIL_CONFIRMATION_SALT),
+        token=confirm_serializer.dumps(user_email, salt=app.config['EMAIL_CONFIRMATION_SALT']),
         _external=True)
 
     html = render_template(
@@ -44,7 +41,7 @@ def send_reset_password_email(user_email):
 
     reset_url = url_for(
         'reset_password_token',
-        token=confirm_serializer.dumps(user_email, salt=RESET_PASSWORD_SALT),
+        token=confirm_serializer.dumps(user_email, salt=app.config['RESET_PASSWORD_SALT']),
         _external=True)
 
     html = render_template(
