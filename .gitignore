@@ -2,3 +2,4 @@
 __pycache__/
 migrations/
 instance/ # environment variables for the website
+*.pyc
